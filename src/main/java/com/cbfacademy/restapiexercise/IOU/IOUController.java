@@ -1,15 +1,20 @@
 package com.cbfacademy.restapiexercise;
 
+import java.math.BigDecimal;
+import java.time.Instant;
+
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class AppController {
+public class IOUController {
 
-	@GetMapping
-	public String Ping() {
-		return "Ping";
+	@GetMapping(value="/",produces = MediaType.APPLICATION_JSON_VALUE)
+	public IOU Ping() {
+		IOU transaction = new IOU ("Bob", "Mary", new BigDecimal("25.52"), Instant.now());
+		return transaction;
 	}
 
 	@GetMapping("/greeting")
@@ -17,9 +22,4 @@ public class AppController {
 		return String.format("Hello %s", name);
 	}
 
-}
-
-public class IOU {
-		public String Name;
-		public BigDecimal amount;
 }
