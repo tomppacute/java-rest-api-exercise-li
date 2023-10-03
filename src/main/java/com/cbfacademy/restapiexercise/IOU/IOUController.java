@@ -10,16 +10,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class IOUController {
-
-	@GetMapping(value="/",produces = MediaType.APPLICATION_JSON_VALUE)
-	public IOU Ping() {
-		IOU transaction = new IOU ("Bob", "Mary", new BigDecimal("25.52"), Instant.now());
-		return transaction;
+	
+	@GetMapping("/")
+	public String ping() {
+		return String.format("Service running successfully "+Instant.now().toString());
 	}
 
-	@GetMapping("/greeting")
-	public String greeting(@RequestParam(value = "name", defaultValue = "World") String name) {
-		return String.format("Hello %s", name);
+	@GetMapping(value="/iou",produces = MediaType.APPLICATION_JSON_VALUE)
+	public IOU getIOUs() {
+		IOU transaction = new IOU ("Bob", "Mary", new BigDecimal("25.52"), Instant.now());
+		return transaction;
 	}
 
 }
