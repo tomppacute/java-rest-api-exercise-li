@@ -1,4 +1,4 @@
-package com.cbfacademy.apiassessment;
+package com.cbfacademy.restapiexercise;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,4 +17,9 @@ public class AppController {
 		return String.format("Hello %s", name);
 	}
 
+}
+
+public class IOU {
+		public String Name;
+		public BigDecimal amount;
 }
