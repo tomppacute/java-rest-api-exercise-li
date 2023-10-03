@@ -57,3 +57,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Temp files and logs ###
+TEMP.md
