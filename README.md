@@ -21,3 +21,13 @@ Create RESTful endpoints for the following operations:
 1. Retrieve a specific IOU by ID (HTTP GET)
 1. Update an existing IOU (HTTP PUT)
 1. Delete an IOU by ID (HTTP DELETE)
+
+| Method | URL | Description | Example URL | Request Body | Response Body |
+|---|---|---|---|---|---|
+| `GET` | `/`|  |  |
+| `GET` | `/balance/{lender}`|  |  |
+| `GET` | `/iou`|  |  |
+| `GET` | `/iou/{id}`|  |  |
+| `POST` | `/iou` | |  |  |
+| `PATCH` | `/iou/{id}` | |  |  |
+| `DELETE` | `/iou` | |  |  |
