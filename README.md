@@ -18,8 +18,10 @@ Create an `IOU` entity class with fields like `id`, `borrower`, `lender`, `amoun
 }
 ```
 
-##  REST Endpoints
+## Implement RESTful Endpoints 
+
 Create RESTful endpoints for the following operations:
+
 1. Retrieve a list of all IOUs (HTTP GET)
 1. Retrieve a specific IOU by ID (HTTP GET)
 1. Create a new IOU (HTTP POST)
@@ -31,9 +33,16 @@ Create RESTful endpoints for the following operations:
 | `GET` | `/ious`| Get all IOUs |  
 | `GET` | `/ious/{id}`| Get an IOU by id |
 | `POST` | `/ious` | Add an IOU |  
-| `PATCH` | `/ious/{id}` | Update an IOU by Id |
 | `PUT` | `/ious/{id}` | Replace an IOU by Id |
 | `DELETE` | `/ious/{id}` | Delete an IOU by id |
+
+## Learning Objectives:
+
+By the end of this exercise, you should be able to:
+
+- Set up a Spring Boot project using a development environment
+- Create a simple RESTful API for IOU tracking.
+- Implement CRUD operations (Create, Read, Update, Delete) for IOUs
 
 ## Getting Started
 
