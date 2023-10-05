@@ -12,9 +12,10 @@ import org.springframework.http.ResponseEntity;
 import java.net.URL;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(classes = ProjectApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class AppTests {
+class IOUControllerTests {
 
 	@LocalServerPort
 	private int port;
@@ -26,24 +27,15 @@ class AppTests {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		this.base = new URL("http://localhost:" + port + "/greeting");
+		this.base = new URL("http://localhost:" + port + "/ious");
 	}
 
 	@Test
-	@Description("/greeting endpoint returns expected response for default name")
-	public void greeting_ExpectedResponseWithDefaultName() {
-		ResponseEntity<String> response = restTemplate.getForEntity(base.toString(), String.class);
+	@Description("/ping endpoint returns expected response")
+	public void ping_ExpectedResponse() {
+		ResponseEntity<String> response = restTemplate.getForEntity(base.toString() + "/ping", String.class);
 
 		assertEquals(200, response.getStatusCode().value());
-		assertEquals("Hello World", response.getBody());
-	}
-
-	@Test
-	@Description("/greeting endpoint returns expected response for specified name parameter")
-	public void greeting_ExpectedResponseWithNameParam() {
-		ResponseEntity<String> response = restTemplate.getForEntity(base.toString() + "?name=John", String.class);
-
-		assertEquals(200, response.getStatusCode().value());
-		assertEquals("Hello John", response.getBody());
+		assertTrue(response.getBody().startsWith("Service running successfully"));
 	}
 }
