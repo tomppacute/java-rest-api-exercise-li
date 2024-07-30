@@ -33,16 +33,16 @@ exit;
 ```
 
 ### Initialise Project
-- Open this [pre-configured Initializr project](https://start.spring.io/#!type=maven-project&language=java&packaging=jar&jvmVersion=21&groupId=com.cbfacademy&artifactId=restapiexercise&name=REST%20API%20Exercise&description=RESTful%20API%20exercise%20using%20Spring%20Boot&packageName=com.cbfacademy.restapiexercise&dependencies=web,data-jpa,mysql,devtools) and click "Generate" to download a zipped project.
+- Open this [pre-configured Initializr project](https://start.spring.io/#!type=maven-project&language=java&packaging=jar&jvmVersion=21&groupId=com.cbfacademy&artifactId=restapiexercise&name=REST%20API%20Exercise&description=RESTful%20API%20exercise%20using%20Spring%20Boot&packageName=com.cbfacademy.restapiexercise&dependencies=web,data-jpa,mysql,devtools). Review the configured settings, but do not make any changes. Click "Generate" to download a zipped project.
 - Extract the downloaded zip file and copy the *contents* of the folder (**not** the folder itself!) to your local repository. Don't drag-and-drop in Explorer/Finder as there are hidden files which may not be correctly copied across.
-  - Windows: `xcopy [extracted directory] [local repo directory] /S /H /C /Y`, e.g. `xcopy C:\Users\myaccount\Downloads\restapiexercise C:\Dev\cbfacademy\java-rest-api-exercise /S /H /C /Y`
-  - macOS: `cp -R [extracted directory]/. [local repo directory]` e.g. `cp -R ~/Downloads/restapiexercise/. ~/Dev/cbfacademy/java-rest-api-exercise` (note that the `/.` after the extracted directory path is required for the command to work as intended)
+  - macOS / Git Bash: `cp -R [extracted directory]/. [local repo directory]` e.g. `cp -R ~/Downloads/restapiexercise/. ~/Dev/cbfacademy/java-rest-api-exercise` (**IMPORTANT:** the `/.` after the extracted directory path is required for the command to work as intended)
+  - Windows Command Prompt: `xcopy [extracted directory] [local repo directory] /S /H /C /Y`, e.g. `xcopy C:\Users\myaccount\Downloads\restapiexercise C:\Dev\cbfacademy\java-rest-api-exercise /S /H /C /Y`
 - Open your repository in VS Code
 - Add the following values to src/main/resources/application.properties:
 
 ```properties
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
-spring.jpa.hibernate.ddl-auto=create
+spring.jpa.hibernate.ddl-auto=update
 spring.jpa.open-in-view=true
 spring.config.import=optional:./local.properties
 ```
@@ -58,11 +58,14 @@ spring.datasource.password= # Specify your db user's password, if applicable
 
 Open a terminal at the root of the repo directory and run the following command to install the dependencies:
 
+#### macOS / Git Bash
+
 ```sh
 ./mvnw clean dependency:resolve
 ```
 
-If you are on a Windows machine, that will be:
+#### Windows Command Prompt
+
 ```cmd
 mvnw clean dependency:resolve
 ```
@@ -71,11 +74,13 @@ mvnw clean dependency:resolve
 
 To start the API from the terminal, run the following command:
 
+#### macOS / Git Bash
+
 ```sh
 ./mvnw spring-boot:run
 ```
 
-Or on Windows:
+#### Windows Command Prompt
 
 ```cmd
 mvnw spring-boot:run
@@ -91,7 +96,7 @@ If successful, you should see output that ends similarly to the below
 ### Stop Application
 Stop the application by pressing `Ctrl + C`
 
-## Completing the Exercise
+## Exercise 1
 
 1. Create an ious package in the main restapiexercise package
 2. Create an `IOU` entity class that maps to the "ious" table and has the following fields:
@@ -107,10 +112,57 @@ Stop the application by pressing `Ctrl + C`
 7. Start your API with `./mvnw clean spring-boot:run` (if it's already running, restart it) and confirm there are no errors
 8. Check your database contains an "ious" table with the correct columns and data types
 
+## Exercise 2
+
+1. Create an IOUService class that accepts an IOURepository as a dependency and implements the following methods:
+    - `List<IOU> getAllIOUs()`
+    - `IOU getIOU(UUID id) throws NoSuchElementException`
+    - `IOU createIOU(IOU iou) throws IllegalArgumentException, OptimisticLockingFailureException`
+    - `IOU updateIOU(UUID id, IOU updatedIOU) throws NoSuchElementException`
+    - `void deleteIOU(UUID id)`
+2. Create an `IOUController` class that implements the endpoints below. Ensure your service class is injected as a dependency and apply the appropriate annotations
+3. Start your API and confirm there are no errors
+
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| GET | /api/ious | Retrieve a list of (optionally filtered) IOUs |
+| GET | /api/ious/{id} | Retrieve a specific IOU by its ID |
+| POST | /api/ious | Create a new IOU |
+| PUT | /api/ious/{id} | Update an existing IOU by ID |
+| DELETE | /api/ious/{id} | Delete an IOU by ID |
+
+## Exercise 3
+
+1. Create an `ious` package inside the test/java/com/cbfacademy/restapiexercise package
+2. Download the [test suite](https://gist.github.com/cbfacademy-admin/be990e8da45fca196513f35f86ed3f52) and copy to the test ious package as IOUControllerTest.java
+3. Run the tests with `./mvnw test`
+4. Examine the results. Which tests fail? What reasons are given?
+
+## Exercise 4
+
+1. Create a new API endpoint to return IOUs for a specific borrower:
+   1. Create a method in your repository interface called `findByBorrower` that accepts a string `borrower` parameter.
+   2. Create a method in your service class called `getIOUsByBorrower`.
+   3. Extend the `getIOUS` method of your controller to accept an optional query string parameter, e.g.: `getIOUs(@RequestParam(required = false) String borrower)`
+   4. Check the value of the `borrower` parameter to determine whether to call the existing service method or the new, filtered, one
+2. Test the modified endpoint
+3. Commit your changes
+
+## Exercise 5
+
+1. Create a new API endpoint to return IOUs with above-average value:
+   1. Create a method in your repository interface called `findHighValueIOUs`.
+   2. Define a native `@Query` annotation that will return all IOUs with an above average value. Hint: create a subquery using the `AVG` function
+   3. Create a method in your service class called `getHighValueIOUs`.
+   4. Create a `getHighValueIOUS` method in your controller, mapped to the `/high` path.
+2. Test the new endpoint
+3. Commit your changes
+4. Create a new endpoint at `/low` to return IOUs that are below or equal to the average value. Implement the repository method using JPQL instead of SQL
+
 
 ## Testing the API
 
-You can test your endpoints using [Postman](https://www.postman.com) or your preferred REST client.
+You can test your endpoints using [Postman](https://www.postman.com) or your preferred REST client at http://localhost:8080/api/ious
 
 The JSON representation of an IOU that you'll get in responses or provide in the request body for `POST` and `PUT` requests will resemble the following:
 
